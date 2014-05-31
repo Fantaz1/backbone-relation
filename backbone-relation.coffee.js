@@ -1,3 +1,10 @@
+/* ==========================================================
+ * @name backbone-relation
+ * @version 1.0.0
+ * @requires Backbone
+ * @author Evgeniy Zabolotniy
+ * ========================================================== */
+
 camelize = (str)->
   str = str.replace /(?:^|[-_])(\w)/g, (a, c)-> if c then c.toUpperCase() else ''
   str.charAt(0).toLowerCase() + str.substr(1)
