@@ -14,13 +14,12 @@ class Backbone.RelationModel extends Backbone.Model
     init: true
     reset: true
     parent: 'parent'
-    initCallback: null
     collectionName: null
+    comparator: null
 
   defaultParamsHasOne:
     init: true
     parent: 'parent'
-    initCallback: null
     modelName: null
 
   hasMany: (collection, options)->
@@ -33,7 +32,7 @@ class Backbone.RelationModel extends Backbone.Model
     model = collection::model
 
     if options['key']?
-      key = options['key']
+      key = options.key
     else if model? and model::paramRoot?
       key = "#{model::paramRoot}s" # TODO: add pluralize
     else
@@ -52,8 +51,8 @@ class Backbone.RelationModel extends Backbone.Model
       else
         collection = new collection(json)
         collection[options.parent] = @
+        collection.comparator = options.comparator if options['comparator']?
         @[collectionName] = collection
-        options.initCallback?(collection)
 
     @on "change:#{key}", parse, this
 
@@ -83,7 +82,6 @@ class Backbone.RelationModel extends Backbone.Model
         model = new model(json)
         model[options.parent] = @
         @[modelName] = model
-        options.initCallback?(model)
 
     @on "change:#{key}", parse, this
 
