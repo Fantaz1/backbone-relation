@@ -1,9 +1,9 @@
-/* ==========================================================
- * @name backbone-relation
- * @version 1.0.0
- * @requires Backbone
- * @author Evgeniy Zabolotniy
- * ========================================================== */
+#  ==========================================================
+#  @name backbone-relation
+#  @version 1.0.0
+#  @requires Backbone
+#  @author Evgeniy Zabolotniy
+#  ==========================================================
 
 camelize = (str)->
   str = str.replace /(?:^|[-_])(\w)/g, (a, c)-> if c then c.toUpperCase() else ''
@@ -15,30 +15,31 @@ class Backbone.RelationModel extends Backbone.Model
     reset: true
     parent: 'parent'
     initCallback: null
+    collectionName: null
 
   defaultParamsHasOne:
     init: true
     parent: 'parent'
     initCallback: null
+    modelName: null
 
   hasMany: (collection, options)->
     options['parent'] = @paramRoot if !options['parent']? and @paramRoot?
 
-    options = _.extend @defaultParamsHasMany, options
+    options = _.extend _.clone(@defaultParamsHasMany), options
 
     throw new Error('Collection is empty') unless collection?
 
     model = collection::model
-    if model? and model::paramRoot?
-      key = model::paramRoot
-    else if options['key']?
-      key = options.key
+
+    if options['key']?
+      key = options['key']
+    else if model? and model::paramRoot?
+      key = "#{model::paramRoot}s" # TODO: add pluralize
     else
       throw new Error('Key value is empty, please set key params!')
 
-    key = "#{key}s" # TODO: add pluralize
-
-    collectionName = camelize(key)
+    collectionName = options.collectionName || camelize(key)
 
     parse = =>
       json = @get(key)
@@ -60,18 +61,18 @@ class Backbone.RelationModel extends Backbone.Model
 
   hasOne: (model, options)->
     options['parent'] = @paramRoot if !options['parent']? and @paramRoot?
-    options = _.extend @defaultParamsHasOne, options
+    options = _.extend _.clone(@defaultParamsHasOne), options
 
     throw new Error('Model is empty') unless model?
 
-    if model::paramRoot?
-      key = model::paramRoot
-    else if options['key']?
+    if options['key']?
       key = options.key
+    else if model::paramRoot?
+      key = model::paramRoot
     else
       throw new Error('Key value is empty, please set key params!')
 
-    modelName = camelize(key)
+    modelName = options.modelName || camelize(key)
 
     parse = =>
       json = @get(key)
