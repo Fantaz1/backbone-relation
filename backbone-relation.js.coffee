@@ -14,10 +14,12 @@ class Backbone.RelationModel extends Backbone.Model
     init: true
     reset: true
     parent: 'parent'
+    initCallback: null
 
   defaultParamsHasOne:
     init: true
     parent: 'parent'
+    initCallback: null
 
   hasMany: (collection, options)->
     options['parent'] = @paramRoot if !options['parent']? and @paramRoot?
@@ -50,6 +52,7 @@ class Backbone.RelationModel extends Backbone.Model
         collection = new collection(json)
         collection[options.parent] = @
         @[collectionName] = collection
+        options.initCallback?(collection)
 
     @on "change:#{key}", parse, this
 
@@ -79,6 +82,7 @@ class Backbone.RelationModel extends Backbone.Model
         model = new model(json)
         model[options.parent] = @
         @[modelName] = model
+        options.initCallback?(model)
 
     @on "change:#{key}", parse, this
 
