@@ -13,11 +13,15 @@ class Backbone.RelationModel extends Backbone.Model
   defaultParamsHasMany:
     init: true
     reset: true
+    parent: 'parent'
 
   defaultParamsHasOne:
     init: true
+    parent: 'parent'
 
   hasMany: (collection, options)->
+    options['parent'] = @paramRoot if !options['parent']? and @paramRoot?
+
     options = _.extend @defaultParamsHasMany, options
 
     throw new Error('Collection is empty') unless collection?
@@ -43,13 +47,16 @@ class Backbone.RelationModel extends Backbone.Model
         else
           @[collectionName].set(json)
       else
-        @[collectionName] = new collection(json)
+        collection = new collection(json)
+        collection[options.parent] = @
+        @[collectionName] = collection
 
     @on "change:#{key}", parse, this
 
     parse() if options.init is true or @has(key)
 
   hasOne: (model, options)->
+    options['parent'] = @paramRoot if !options['parent']? and @paramRoot?
     options = _.extend @defaultParamsHasOne, options
 
     throw new Error('Model is empty') unless model?
@@ -69,7 +76,9 @@ class Backbone.RelationModel extends Backbone.Model
       if @[modelName]
         @[modelName].set(json)
       else
-        @[modelName] = new model(json)
+        model = new model(json)
+        model[options.parent] = @
+        @[modelName] = model
 
     @on "change:#{key}", parse, this
 
