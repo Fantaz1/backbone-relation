@@ -3,6 +3,7 @@
 #  @version 1.0.0
 #  @requires Backbone
 #  @author Evgeniy Zabolotniy
+#  @url https://github.com/Fantaz1/backbone-relation
 #  ==========================================================
 
 camelize = (str)->
