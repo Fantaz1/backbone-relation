@@ -18,6 +18,8 @@ class User extends Backbone.RelationModel
   + **reset** (default: true) - if true collection will be reseted after json changed with Backbone method 'reset', in another case, it will use 'set' method
   + **init** (default: true) - initialize collection even if json is empty
   + **key** (default: paramsRoot from collection.model) - it will use this key for getting data and naming child collection variable
+  + **collectionName** (default: 'key' value if it presents, in another case - model::paramRoot) - name of collection variable
+  + **comparator** (default: null) - comparator for collection
 
 ### Has One assotiation:
 
@@ -31,6 +33,7 @@ class Company extends Backbone.RelationModel
 ###### options:
   + **init** (default: true) - initialize model even if json is empty
   + **key** (default: paramsRoot from the model) - it will use this key for getting data and naming child model variable
+  + **modelName** (default: 'key' value if it presents, in another case - model::paramRoot) - name of model variable
 
 ### Example:
 ###### hasMany
