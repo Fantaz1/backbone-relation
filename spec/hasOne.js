@@ -16,7 +16,7 @@ describe("hasOne", function() {
       User = initUserModel();
       user = new User({address: {id: 1}});
 
-      expect(user.address).not.toBeUndefined();
+      expect(user.address).toBeInstanceOf(Address);
     });
 
     it("shouldn't init collection variable if init option is false and json is empty", function(){
@@ -30,7 +30,7 @@ describe("hasOne", function() {
       User = initUserModel({init: false});
       user = new User({address: {id: 1}});
 
-      expect(user.address).not.toBeUndefined();
+      expect(user.address).toBeInstanceOf(Address);
     });
   });
 
@@ -39,7 +39,7 @@ describe("hasOne", function() {
       User = initUserModel();
       user = new User({address: {id: 1}});
 
-      expect(user.address.user).not.toBeUndefined();
+      expect(user.address.user).toBeInstanceOf(User);
       expect(user.address.user.cid).toEqual(user.cid);
     });
 
@@ -47,7 +47,7 @@ describe("hasOne", function() {
       User = initUserModel({parent: 'owner'});
       user = new User({address: {id: 1}});
 
-      expect(user.address.owner).not.toBeUndefined();
+      expect(user.address.owner).toBeInstanceOf(User);
       expect(user.address.owner.cid).toEqual(user.cid);
     });
   });
@@ -57,14 +57,14 @@ describe("hasOne", function() {
       User = initUserModel({key: 'location'});
       user = new User({location: {id: 1}});
 
-      expect(user.location).not.toBeUndefined();
+      expect(user.location).toBeInstanceOf(Address);
     });
 
     it("camelizes the key value for collection name", function(){
       User = initUserModel({key: 'user_address'});
       user = new User({user_address: {id: 1}});
 
-      expect(user.userAddress).not.toBeUndefined();
+      expect(user.userAddress).toBeInstanceOf(Address);
     });
   });
 
@@ -73,14 +73,14 @@ describe("hasOne", function() {
       User = initUserModel({modelName: 'location'})
       user = new User({address: {id: 1}});
 
-      expect(user.location).not.toBeUndefined();
+      expect(user.location).toBeInstanceOf(Address);
     });
 
     it("doesn't camelize modelName", function(){
       User = initUserModel({modelName: 'user_location'})
       user = new User({address: {id: 1}});
 
-      expect(user.user_location).not.toBeUndefined();
+      expect(user.user_location).toBeInstanceOf(Address);
     });
   });
 });

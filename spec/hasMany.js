@@ -16,8 +16,17 @@ describe("hasMany", function() {
       User = initUserModel();
       user = new User({tasks: [{id: 1}, {id: 2}]});
 
-      expect(user.tasks).not.toBeUndefined();
-      expect(user.tasks.length).toEqual(2);
+      expect(user.tasks).toBeInstanceOf(TasksCollection);
+    });
+
+    it("sets all data to collection", function(){
+      User = initUserModel();
+      tasks = [{id: 1}, {id: 2}]
+      user = new User({tasks: tasks});
+
+      for(var i=0; i<tasks.length; i += 1){
+        expect(user.tasks.get(tasks[i].id)).toBeInstanceOf(Task);
+      }
     });
 
     it("shouldn't init collection variable if init option is false and json is empty", function(){
@@ -31,8 +40,7 @@ describe("hasMany", function() {
       User = initUserModel({init: false});
       user = new User({tasks: [{id: 1}, {id: 2}]});
 
-      expect(user.tasks).not.toBeUndefined();
-      expect(user.tasks.length).toEqual(2);
+      expect(user.tasks).toBeInstanceOf(TasksCollection);
     });
   });
 
@@ -90,7 +98,7 @@ describe("hasMany", function() {
       User = initUserModel();
       user = new User({tasks: [{id: 1}, {id: 2}]});
 
-      expect(user.tasks.user).not.toBeUndefined();
+      expect(user.tasks.user).toBeInstanceOf(User);
       expect(user.tasks.user.cid).toEqual(user.cid);
     });
 
@@ -98,7 +106,7 @@ describe("hasMany", function() {
       User = initUserModel({parent: 'owner'});
       user = new User({tasks: [{id: 1}, {id: 2}]});
 
-      expect(user.tasks.owner).not.toBeUndefined()
+      expect(user.tasks.owner).toBeInstanceOf(User);
       expect(user.tasks.owner.cid).toEqual(user.cid)
     });
   });
@@ -108,7 +116,7 @@ describe("hasMany", function() {
       User = initUserModel({key: 'tickets'});
       user = new User({tickets: [{id: 1}, {id: 2}]});
 
-      expect(user.tickets).not.toBeUndefined();
+      expect(user.tickets).toBeInstanceOf(TasksCollection);
       expect(user.tickets.length).toEqual(2);
     });
 
@@ -116,7 +124,7 @@ describe("hasMany", function() {
       User = initUserModel({key: 'user_tickets'});
       user = new User({user_tickets: [{id: 1}, {id: 2}]});
 
-      expect(user.userTickets).not.toBeUndefined();
+      expect(user.userTickets).toBeInstanceOf(TasksCollection);
       expect(user.userTickets.length).toEqual(2);
     });
   });
@@ -126,7 +134,7 @@ describe("hasMany", function() {
       User = initUserModel({collectionName: 'tickets'})
       user = new User({tasks: [{id: 1}, {id: 2}]});
 
-      expect(user.tickets).not.toBeUndefined();
+      expect(user.tickets).toBeInstanceOf(TasksCollection);
       expect(user.tickets.length).toEqual(2);
     });
 
@@ -134,7 +142,7 @@ describe("hasMany", function() {
       User = initUserModel({collectionName: 'user_tickets'})
       user = new User({tasks: [{id: 1}, {id: 2}]});
 
-      expect(user.user_tickets).not.toBeUndefined();
+      expect(user.user_tickets).toBeInstanceOf(TasksCollection);
       expect(user.user_tickets.length).toEqual(2);
     });
   });
