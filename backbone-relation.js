@@ -33,10 +33,15 @@ Backbone.RelationModel = Backbone.Model.extend({
   },
   hasMany: function(collection, options) {
     var collectionName, key, model, parse;
+
+    if (options == null) options = {}
+
     if ((options['parent'] == null) && (this.paramRoot != null)) {
       options['parent'] = this.paramRoot;
     }
+
     options = _.extend(_.clone(this.defaultParamsHasMany), options);
+
     if (collection == null) {
       throw new Error('Collection is empty');
     }
@@ -77,6 +82,9 @@ Backbone.RelationModel = Backbone.Model.extend({
   },
   hasOne: function(model, options) {
     var key, modelName, parse;
+
+    if (options==null) options = {}
+
     if ((options['parent'] == null) && (this.paramRoot != null)) {
       options['parent'] = this.paramRoot;
     }
